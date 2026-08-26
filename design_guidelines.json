@@ -1,0 +1,87 @@
+{
+  "brand": "MAPO",
+  "revision": "2026-08 — editorial rebuild",
+  "supersedes": "The previous dark/neon/glassmorphism direction. Every rule below replaces it.",
+  "philosophy": {
+    "one_line": "Premium, editorial, tactile. The food is the interface; the numbers are the content.",
+    "reference_points": [
+      "High-end food magazines and premium packaging",
+      "Anatomical plates and exploded technical drawings",
+      "Restaurant menus, not fitness dashboards"
+    ],
+    "rhythm": "Alternate impact and calm. Hero (calm) → burger anatomy (impact) → thesis (calm) → pizza builder (impact) → build your plate (calm) → feed. The loud sections only land because the quiet ones give the eye somewhere to rest."
+  },
+  "forbidden": [
+    "Gradients of any kind — backgrounds, text, borders, bars, 3D materials",
+    "Glassmorphism, backdrop blur, frosted panels",
+    "Glow, neon, bloom, drop-shadow halos",
+    "Pill-shaped buttons, heavily rounded cards, card grids as a layout default",
+    "Floating 3D blobs, particles, decorative sparkles",
+    "Stock fitness photography and generic AI illustration",
+    "Fabricated testimonials, statistics, logos or reviews",
+    "Moralising food copy: no 'cheat', 'guilty', 'naughty', 'bad' foods",
+    "'AI-powered', 'revolutionise', 'ecosystem', 'journey' marketing language"
+  ],
+  "colour": {
+    "rule": "Solid colour only. Depth comes from value contrast, hairline rules and whitespace.",
+    "ground": { "ink": "#0C0B0A", "surface": "#141210", "raised": "#1C1916" },
+    "text": { "primary": "#F5F1EA", "muted": "#8F877C" },
+    "accent": { "gold": "#E9B949", "usage": "One accent, used sparingly: a heading's second line, an active state, a leader line, the plate control. Never a page background, never a large fill." },
+    "data_only": {
+      "tomato": "#E2231A",
+      "note": "Food and macro colours belong to the food. They must never appear in page chrome."
+    },
+    "rules": "Hairlines are cream at 10–12% alpha. Never pure black, never pure white."
+  },
+  "typography": {
+    "family": "Archivo (400/500/700/800/900) for everything. One family, wide weight range.",
+    "display": "font-display, weight 800, tracking -0.035em, line-height 0.9. Fluid sizes: text-display-sm / -md / -lg.",
+    "numbers": "Numbers are content. Use .tnum (tabular figures) and the text-num-* scale, and animate value changes with useCountUp — never jump-cut a figure.",
+    "labels": ".label — 10px, 700, uppercase, 0.22em tracking, muted. Used for section numbers, units and captions.",
+    "copy": "Short. Prefer a line break over a comma. No paragraphs where a sentence will do."
+  },
+  "surfaces_and_shape": {
+    "radius": "2px. Effectively square. The only circle in the system is the Build Your Plate control.",
+    "panels": "Solid .panel / .glass on a hairline border. No shadow.",
+    "borders": "1px. The previous 3px poster rules are gone — they read as brutalist, not editorial."
+  },
+  "motion": {
+    "principles": "Short, eased, purposeful. Mechanical rather than bouncy. Nothing springs, nothing bounces, nothing pulses for attention.",
+    "easing": "cubic-bezier(0.2, 0, 0, 1) for interface; easeOutExpo for counting numbers.",
+    "scroll": "Desktop uses pinned tall sections to scrub the food animations (useScrollProgress). Phones do not — the section collapses to normal flow and the animation plays on arrival (useInView). See BurgerAnatomy's `cinematic` flag.",
+    "reduced_motion": "prefers-reduced-motion disables every animation and the pinned-scroll choreography, and defaults sound to off. Every scroll-driven state must also be reachable by a control."
+  },
+  "food_experiences": {
+    "count": "Exactly two. Burger and pizza. Do not add a third — polish these instead.",
+    "burger": "Deconstruction. Nine independently controllable layers, exploded on scroll, each clickable, with leader lines to labelled per-layer nutrition. Reassembles into the customised burger.",
+    "pizza": "Construction. Base → sauce → cheese → toppings → bake → yours. The opposite gesture on purpose.",
+    "engine": "src/food/FoodStack.jsx renders both. Layers are real separate objects, never a sliced-up flat image.",
+    "assets": "src/food/manifest.js is the seam. Each layer names a transparent PNG; useLayerAssets probes the set at mount and falls back to geometry only if the whole set is missing. Photoreal artwork drops in at public/food/{burger,pizza}/ with no code change. Spec: 2048px wide, transparent, one ingredient per file, identical camera and lighting across a set, three-quarter view for the burger and top-down for the pizza."
+  },
+  "data": {
+    "rule": "Nutrition comes from the API. Never hardcode a figure in the frontend and never ship a bundled shadow copy of the database.",
+    "endpoints": {
+      "/api/foods/components": "Ingredient-level nutrition for the burger and pizza, priced per gram weight.",
+      "/api/foods/search": "Dish-level search over the food database.",
+      "/api/weight, /api/progress/today, /api/progress/week": "History for the goal journey, daily progress and weekly rewind."
+    },
+    "provenance": "backend/food_components.py prefers data/food_database.csv wherever it carries the row, and falls back to IFCT 2017 / USDA FoodData Central constants only where it does not. Every component records which.",
+    "failure": "If the API does not answer, say so and withhold the figures. Never display a plausible guess."
+  },
+  "accessibility": {
+    "required": [
+      "Semantic HTML; every control a real button with an accessible name",
+      "Visible focus rings in the accent colour — never removed",
+      "Colour is never the only carrier of meaning: the macro split bar also prints its percentages",
+      "Hit targets at least 36px, generous invisible hit slabs over small 3D geometry",
+      "Every scroll-driven state also reachable by a control",
+      "data-testid on every interactive element"
+    ]
+  },
+  "for_future_agents": [
+    "Read this file before changing any visual code, and check a change against the `forbidden` list before shipping it.",
+    "When choosing between more features and better design, choose better design. Between more animation and better animation, better animation.",
+    "Do not reintroduce the feed's card grid as a layout pattern for new sections.",
+    "Keep the two food experiences at two."
+  ]
+}
